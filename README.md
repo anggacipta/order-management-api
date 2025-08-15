@@ -15,7 +15,7 @@ Order Management API adalah aplikasi backend sederhana untuk manajemen produk, p
 
 ### 1. Clone repository
 ```bash
-git clone <url-repo-anda>
+git clone https://github.com/anggacipta/order-management-api.git
 cd order-management-api
 ```
 

@@ -1,8 +1,9 @@
 package utils
 
 import (
-	"order-management-api/models"
 	"time"
+
+	"github.com/anggacipta/order-management-api/models"
 
 	"github.com/golang-jwt/jwt/v4"
 )

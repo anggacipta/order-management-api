@@ -1,11 +1,13 @@
 package controllers
 
 import (
-	"order-management-api/dto"
-	"order-management-api/helpers"
-	"order-management-api/models"
-	"order-management-api/utils"
+	"errors"
+	"strings"
 
+	"github.com/anggacipta/order-management-api/dto"
+	"github.com/anggacipta/order-management-api/helpers"
+	"github.com/anggacipta/order-management-api/models"
+	"github.com/anggacipta/order-management-api/utils"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -20,6 +22,10 @@ func RegisterAdmin(c *gin.Context) {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	user := models.User{Name: input.Name, Email: input.Email, Password: string(hashedPassword), Role: "admin"}
 	if err := models.DB.Create(&user).Error; err != nil {
+		if strings.Contains(err.Error(), "UNIQUE") && strings.Contains(err.Error(), "users.email") {
+			helpers.RespondValidationError(c, errors.New("email sudah terdaftar"))
+			return
+		}
 		helpers.RespondValidationError(c, err)
 		return
 	}
@@ -35,6 +41,10 @@ func Register(c *gin.Context) {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	user := models.User{Name: input.Name, Email: input.Email, Password: string(hashedPassword), Role: "customer"}
 	if err := models.DB.Create(&user).Error; err != nil {
+		if strings.Contains(err.Error(), "UNIQUE") && strings.Contains(err.Error(), "users.email") {
+			helpers.RespondValidationError(c, errors.New("email sudah terdaftar"))
+			return
+		}
 		helpers.RespondValidationError(c, err)
 		return
 	}

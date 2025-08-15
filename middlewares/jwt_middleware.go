@@ -2,8 +2,9 @@ package middlewares
 
 import (
 	"net/http"
-	"order-management-api/utils"
 	"strings"
+
+	"github.com/anggacipta/order-management-api/utils"
 
 	"github.com/gin-gonic/gin"
 )

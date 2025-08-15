@@ -7,9 +7,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"order-management-api/controllers"
-	"order-management-api/dto"
-	"order-management-api/models"
+	"github.com/anggacipta/order-management-api/controllers"
+	"github.com/anggacipta/order-management-api/dto"
+	"github.com/anggacipta/order-management-api/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"order-management-api/models"
-	"order-management-api/routes"
+	"github.com/anggacipta/order-management-api/models"
+	"github.com/anggacipta/order-management-api/routes"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"order-management-api/controllers"
-	"order-management-api/middlewares"
+	"github.com/anggacipta/order-management-api/controllers"
+	"github.com/anggacipta/order-management-api/middlewares"
 
 	"github.com/gin-gonic/gin"
 )

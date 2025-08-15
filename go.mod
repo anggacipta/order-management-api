@@ -1,4 +1,4 @@
-module order-management-api
+module github.com/anggacipta/order-management-api
 
 go 1.25.0
 

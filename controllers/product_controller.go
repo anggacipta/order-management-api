@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"net/http"
-	"order-management-api/dto"
-	"order-management-api/helpers"
-	"order-management-api/models"
+
+	"github.com/anggacipta/order-management-api/dto"
+	"github.com/anggacipta/order-management-api/helpers"
+	"github.com/anggacipta/order-management-api/models"
 
 	"github.com/gin-gonic/gin"
 )
