@@ -1,0 +1,241 @@
+
+openapi: 3.0.0
+info:
+	title: Order Management API
+	version: 1.0.0
+	description: API untuk manajemen order, produk, dan autentikasi user.
+servers:
+	- url: http://localhost:8080
+paths:
+	/register:
+		post:
+			summary: Register user baru
+			tags: [Auth]
+			requestBody:
+				required: true
+				content:
+					application/json:
+						schema:
+							$ref: '#/components/schemas/RegisterRequest'
+			responses:
+				'200':
+					description: Registrasi berhasil
+				'400':
+					description: Validasi gagal
+	/register-admin:
+		post:
+			summary: Register user admin
+			tags: [Auth]
+			requestBody:
+				required: true
+				content:
+					application/json:
+						schema:
+							$ref: '#/components/schemas/RegisterRequest'
+			responses:
+				'200':
+					description: Registrasi admin berhasil
+				'400':
+					description: Validasi gagal
+	/login:
+		post:
+			summary: Login user
+			tags: [Auth]
+			requestBody:
+				required: true
+				content:
+					application/json:
+						schema:
+							$ref: '#/components/schemas/LoginRequest'
+			responses:
+				'200':
+					description: Login berhasil, return JWT token
+				'400':
+					description: Validasi gagal
+				'401':
+					description: Email/password salah
+	/admin/products:
+		post:
+			summary: Tambah produk (admin only)
+			tags: [Product]
+			security:
+				- bearerAuth: []
+			requestBody:
+				required: true
+				content:
+					application/json:
+						schema:
+							$ref: '#/components/schemas/ProductRequest'
+			responses:
+				'200':
+					description: Produk berhasil dibuat
+				'400':
+					description: Validasi gagal
+				'401':
+					description: Unauthorized
+				'403':
+					description: Forbidden
+		get:
+			summary: List produk (admin only)
+			tags: [Product]
+			security:
+				- bearerAuth: []
+			responses:
+				'200':
+					description: List produk
+				'401':
+					description: Unauthorized
+				'403':
+					description: Forbidden
+	/admin/products/{id}:
+		get:
+			summary: Get produk by ID (admin only)
+			tags: [Product]
+			security:
+				- bearerAuth: []
+			parameters:
+				- in: path
+					name: id
+					schema:
+						type: integer
+					required: true
+					description: ID produk
+			responses:
+				'200':
+					description: Detail produk
+				'404':
+					description: Produk tidak ditemukan
+		put:
+			summary: Update produk (admin only)
+			tags: [Product]
+			security:
+				- bearerAuth: []
+			parameters:
+				- in: path
+					name: id
+					schema:
+						type: integer
+					required: true
+					description: ID produk
+			requestBody:
+				required: true
+				content:
+					application/json:
+						schema:
+							$ref: '#/components/schemas/ProductRequest'
+			responses:
+				'200':
+					description: Produk berhasil diupdate
+				'404':
+					description: Produk tidak ditemukan
+		delete:
+			summary: Hapus produk (admin only)
+			tags: [Product]
+			security:
+				- bearerAuth: []
+			parameters:
+				- in: path
+					name: id
+					schema:
+						type: integer
+					required: true
+					description: ID produk
+			responses:
+				'200':
+					description: Produk berhasil dihapus
+				'404':
+					description: Produk tidak ditemukan
+	/orders:
+		post:
+			summary: Buat order (customer)
+			tags: [Order]
+			security:
+				- bearerAuth: []
+			requestBody:
+				required: true
+				content:
+					application/json:
+						schema:
+							$ref: '#/components/schemas/CreateOrderRequest'
+			responses:
+				'200':
+					description: Order berhasil dibuat
+				'400':
+					description: Validasi gagal / stok kurang
+				'401':
+					description: Unauthorized
+		get:
+			summary: List order milik user (customer)
+			tags: [Order]
+			security:
+				- bearerAuth: []
+			responses:
+				'200':
+					description: List order user
+				'401':
+					description: Unauthorized
+components:
+	securitySchemes:
+		bearerAuth:
+			type: http
+			scheme: bearer
+			bearerFormat: JWT
+	schemas:
+		RegisterRequest:
+			type: object
+			properties:
+				name:
+					type: string
+				email:
+					type: string
+				password:
+					type: string
+			required:
+				- name
+				- email
+				- password
+		LoginRequest:
+			type: object
+			properties:
+				email:
+					type: string
+				password:
+					type: string
+			required:
+				- email
+				- password
+		ProductRequest:
+			type: object
+			properties:
+				name:
+					type: string
+				description:
+					type: string
+				price:
+					type: number
+				stock:
+					type: integer
+			required:
+				- name
+				- description
+				- price
+				- stock
+		OrderItemRequest:
+			type: object
+			properties:
+				product_id:
+					type: integer
+				quantity:
+					type: integer
+			required:
+				- product_id
+				- quantity
+		CreateOrderRequest:
+			type: object
+			properties:
+				items:
+					type: array
+					items:
+						$ref: '#/components/schemas/OrderItemRequest'
+			required:
+				- items

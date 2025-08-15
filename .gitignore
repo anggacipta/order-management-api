@@ -1,0 +1,9 @@
+order.db
+*.exe
+*.swp
+*.log
+.idea/
+.vscode/
+.env
+.DS_Store
+coverage.out

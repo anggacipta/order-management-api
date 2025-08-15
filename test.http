@@ -1,0 +1,88 @@
+### Register User
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+    "name": "testadmin",
+    "email": "testadmin@example.com",
+    "password": "TestPassword123",
+    "role": "admin"
+}
+
+### Register Admin
+POST http://localhost:8080/register-admin
+Content-Type: application/json
+
+{
+    "name": "admin",
+    "email": "admin@gmail.com",
+    "password": "password"
+}
+
+### Login User
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "password"
+}
+
+###
+### Get User Profile
+GET http://localhost:8080/admin/dashboard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTYyNzl9.Yuj-aZTildAgDPkGAP_aRsqLPBlbOdHjBbpFB3t7mZw
+
+### Get All Products
+GET http://localhost:8080/admin/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTYyNzl9.Yuj-aZTildAgDPkGAP_aRsqLPBlbOdHjBbpFB3t7mZw
+
+### Create Product
+POST http://localhost:8080/admin/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTY4MjN9.osUD33sZbzIlxI-qkX9uUOYCL5vu34otlv7zcPoJn9I
+Content-Type: application/json
+
+{
+    "name": "Product A",
+    "description": "Description of Product A",
+    "price": 100,
+    "stock": 50
+}
+
+### get Product by ID
+GET http://localhost:8080/admin/products/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTY4MjN9.osUD33sZbzIlxI-qkX9uUOYCL5vu34otlv7zcPoJn9I
+
+### Update Product
+PUT http://localhost:8080/admin/products/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTYyNzl9.Yuj-aZTildAgDPkGAP_aRsqLPBlbOdHjBbpFB3t7mZw
+Content-Type: application/json
+
+{
+    "name": "Updated Product A",
+    "description": "Updated description of Product A",
+    "price": 120,
+    "stock": 30
+}
+
+### Delete Product
+DELETE http://localhost:8080/admin/products/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTYyNzl9.Yuj-aZTildAgDPkGAP_aRsqLPBlbOdHjBbpFB3t7mZw
+
+### Create Order
+POST http://localhost:8080/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTY4MjN9.osUD33sZbzIlxI-qkX9uUOYCL5vu34otlv7zcPoJn9I
+Content-Type: application/json
+
+{
+    "items": [
+        {
+            "product_id": 2,
+            "quantity": 2
+        }
+    ]
+}
+
+### Get My Orders
+GET http://localhost:8080/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTY4MjN9.osUD33sZbzIlxI-qkX9uUOYCL5vu34otlv7zcPoJn9I
