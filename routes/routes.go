@@ -3,15 +3,21 @@ package routes
 import (
 	"github.com/anggacipta/order-management-api/controllers"
 	"github.com/anggacipta/order-management-api/middlewares"
+	"github.com/anggacipta/order-management-api/services"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(r *gin.Engine) {
+func SetupRoutes(r *gin.Engine, serviceContainer *services.ServiceContainer) {
+	// Initialize controllers with dependency injection
+	authController := controllers.NewAuthController(serviceContainer.AuthService)
+	productController := controllers.NewProductController(serviceContainer.ProductService)
+	orderController := controllers.NewOrderController(serviceContainer.OrderService)
+
 	// Auth routes
-	r.POST("/register", controllers.Register)
-	r.POST("/register-admin", controllers.RegisterAdmin)
-	r.POST("/login", controllers.Login)
+	r.POST("/register", authController.Register)
+	r.POST("/register-admin", authController.RegisterAdmin)
+	r.POST("/login", authController.Login)
 
 	// Contoh: grup route yang butuh autentikasi
 	auth := r.Group("/")
@@ -24,8 +30,8 @@ func SetupRoutes(r *gin.Engine) {
 			c.JSON(200, gin.H{"user_id": userID, "role": role})
 		})
 		// Order endpoint (customer)
-		auth.POST("/orders", controllers.CreateOrder)
-		auth.GET("/orders", controllers.GetMyOrders)
+		auth.POST("/orders", orderController.CreateOrder)
+		auth.GET("/orders", orderController.GetMyOrders)
 
 		// Endpoint hanya untuk admin
 		admin := auth.Group("/admin")
@@ -35,11 +41,11 @@ func SetupRoutes(r *gin.Engine) {
 				c.JSON(200, gin.H{"message": "Welcome, admin!"})
 			})
 			// CRUD Produk
-			admin.POST("/products", controllers.CreateProduct)
-			admin.GET("/products", controllers.GetProducts)
-			admin.GET("/products/:id", controllers.GetProductByID)
-			admin.PUT("/products/:id", controllers.UpdateProduct)
-			admin.DELETE("/products/:id", controllers.DeleteProduct)
+			admin.POST("/products", productController.CreateProduct)
+			admin.GET("/products", productController.GetProducts)
+			admin.GET("/products/:id", productController.GetProductByID)
+			admin.PUT("/products/:id", productController.UpdateProduct)
+			admin.DELETE("/products/:id", productController.DeleteProduct)
 		}
 	}
 }
