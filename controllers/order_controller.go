@@ -16,21 +16,50 @@ func CreateOrder(c *gin.Context) {
 		helpers.RespondValidationError(c, err)
 		return
 	}
+
 	userID, _ := c.Get("user_id")
+
+	// Start database transaction
+	tx := models.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		helpers.RespondInternalError(c, err)
+		return
+	}
+
 	order := models.Order{UserID: userID.(uint)}
 	var orderItems []models.OrderItem
+
+	// Process each item in transaction
 	for _, item := range input.Items {
 		var product models.Product
-		if err := models.DB.First(&product, item.ProductID).Error; err != nil {
+		// Lock the product row for update to prevent race condition
+		if err := tx.Set("gorm:query_option", "FOR UPDATE").First(&product, item.ProductID).Error; err != nil {
+			tx.Rollback()
 			helpers.RespondNotFound(c, "Produk tidak ditemukan")
 			return
 		}
+
+		// Check stock availability
 		if product.Stock < item.Quantity {
+			tx.Rollback()
 			helpers.RespondValidationError(c, errors.New("stok produk tidak cukup"))
 			return
 		}
+
+		// Update stock
 		product.Stock -= item.Quantity
-		models.DB.Save(&product)
+		if err := tx.Save(&product).Error; err != nil {
+			tx.Rollback()
+			helpers.RespondInternalError(c, err)
+			return
+		}
+
 		orderItem := models.OrderItem{
 			ProductID: product.ID,
 			Quantity:  item.Quantity,
@@ -38,11 +67,22 @@ func CreateOrder(c *gin.Context) {
 		}
 		orderItems = append(orderItems, orderItem)
 	}
+
 	order.OrderItems = orderItems
-	if err := models.DB.Create(&order).Error; err != nil {
+
+	// Create order in transaction
+	if err := tx.Create(&order).Error; err != nil {
+		tx.Rollback()
 		helpers.RespondInternalError(c, err)
 		return
 	}
+
+	// Commit transaction
+	if err := tx.Commit().Error; err != nil {
+		helpers.RespondInternalError(c, err)
+		return
+	}
+
 	c.JSON(200, order)
 }
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/anggacipta/order-management-api/config"
 	"github.com/anggacipta/order-management-api/models"
 	"github.com/anggacipta/order-management-api/routes"
 
@@ -8,6 +9,9 @@ import (
 )
 
 func main() {
+	// Load configuration
+	config.LoadConfig()
+
 	// Inisialisasi database
 	models.ConnectDatabase()
 
@@ -16,5 +20,5 @@ func main() {
 	// Inisialisasi semua route
 	routes.SetupRoutes(r)
 
-	r.Run(":8080")
+	r.Run(":" + config.AppConfig.Port)
 }

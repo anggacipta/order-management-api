@@ -3,12 +3,11 @@ package utils
 import (
 	"time"
 
+	"github.com/anggacipta/order-management-api/config"
 	"github.com/anggacipta/order-management-api/models"
 
 	"github.com/golang-jwt/jwt/v4"
 )
-
-var jwtKey = []byte("secret_key") // Ganti dengan env di production
 
 type Claims struct {
 	UserID uint   `json:"user_id"`
@@ -25,12 +24,12 @@ func GenerateJWT(user models.User) (string, error) {
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
+	return token.SignedString([]byte(config.AppConfig.JWTSecret))
 }
 
 func ParseJWT(tokenStr string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return jwtKey, nil
+		return []byte(config.AppConfig.JWTSecret), nil
 	})
 	if err != nil {
 		return nil, err

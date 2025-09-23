@@ -19,7 +19,13 @@ func RegisterAdmin(c *gin.Context) {
 		helpers.RespondValidationError(c, err)
 		return
 	}
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	if err != nil {
+		helpers.RespondInternalError(c, err)
+		return
+	}
+
 	user := models.User{Name: input.Name, Email: input.Email, Password: string(hashedPassword), Role: "admin"}
 	if err := models.DB.Create(&user).Error; err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") && strings.Contains(err.Error(), "users.email") {
@@ -38,7 +44,13 @@ func Register(c *gin.Context) {
 		helpers.RespondValidationError(c, err)
 		return
 	}
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	if err != nil {
+		helpers.RespondInternalError(c, err)
+		return
+	}
+
 	user := models.User{Name: input.Name, Email: input.Email, Password: string(hashedPassword), Role: "customer"}
 	if err := models.DB.Create(&user).Error; err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") && strings.Contains(err.Error(), "users.email") {
