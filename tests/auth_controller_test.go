@@ -7,9 +7,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/anggacipta/order-management-api/config"
 	"github.com/anggacipta/order-management-api/controllers"
 	"github.com/anggacipta/order-management-api/dto"
 	"github.com/anggacipta/order-management-api/models"
+	"github.com/anggacipta/order-management-api/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -17,14 +19,31 @@ import (
 
 func setupAuthTestRouter() *gin.Engine {
 	gin.SetMode(gin.TestMode)
+
+	// Setup test database
+	models.SetupTestDB()
+
+	// Setup test config BEFORE creating service container
+	config.AppConfig = &config.Config{
+		JWTSecret: "test-secret-key-for-testing",
+		Port:      "8080",
+		DBPath:    ":memory:",
+		AppEnv:    "test",
+	}
+
+	// Initialize service container
+	serviceContainer := services.NewServiceContainer(models.DB)
+
+	// Initialize auth controller
+	authController := controllers.NewAuthController(serviceContainer.AuthService)
+
 	r := gin.Default()
-	r.POST("/register", controllers.Register)
-	r.POST("/login", controllers.Login)
+	r.POST("/register", authController.Register)
+	r.POST("/login", authController.Login)
 	return r
 }
 
 func TestRegister_Success(t *testing.T) {
-	models.SetupTestDB() // Pastikan DB test di-reset
 	r := setupAuthTestRouter()
 	input := dto.RegisterRequest{
 		Name:     "Test User",
@@ -40,7 +59,6 @@ func TestRegister_Success(t *testing.T) {
 }
 
 func TestRegister_ValidationError(t *testing.T) {
-	models.SetupTestDB()
 	r := setupAuthTestRouter()
 	input := dto.RegisterRequest{
 		Name:     "",
@@ -56,12 +74,11 @@ func TestRegister_ValidationError(t *testing.T) {
 }
 
 func TestLogin_Success(t *testing.T) {
-	models.SetupTestDB()
 	r := setupAuthTestRouter()
 	// Register user dulu
 	registerInput := dto.RegisterRequest{
 		Name:     "Login User",
-		Email:    "loginuser@example.com",
+		Email:    "testuser@example.com",
 		Password: "password123",
 	}
 	jsonValue, _ := json.Marshal(registerInput)
@@ -72,7 +89,7 @@ func TestLogin_Success(t *testing.T) {
 
 	// Login
 	loginInput := dto.LoginRequest{
-		Email:    "loginuser@example.com",
+		Email:    "testuser@example.com",
 		Password: "password123",
 	}
 	loginJson, _ := json.Marshal(loginInput)
@@ -84,7 +101,6 @@ func TestLogin_Success(t *testing.T) {
 }
 
 func TestLogin_InvalidCredentials(t *testing.T) {
-	models.SetupTestDB()
 	r := setupAuthTestRouter()
 	loginInput := dto.LoginRequest{
 		Email:    "notfound@example.com",

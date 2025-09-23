@@ -7,9 +7,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/anggacipta/order-management-api/config"
 	"github.com/anggacipta/order-management-api/controllers"
 	"github.com/anggacipta/order-management-api/dto"
 	"github.com/anggacipta/order-management-api/models"
+	"github.com/anggacipta/order-management-api/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -23,14 +25,30 @@ func TestMain(m *testing.M) {
 
 func setupTestRouter() *gin.Engine {
 	gin.SetMode(gin.TestMode)
+	models.SetupTestDB()
+
+	// Setup test config
+	config.AppConfig = &config.Config{
+		JWTSecret: "test-secret-key-for-testing",
+		Port:      "8080",
+		DBPath:    ":memory:",
+		AppEnv:    "test",
+	}
+
+	// Initialize service container
+	serviceContainer := services.NewServiceContainer(models.DB)
+
+	// Initialize product controller
+	productController := controllers.NewProductController(serviceContainer.ProductService)
+
 	r := gin.Default()
-	r.POST("/admin/products", controllers.CreateProduct)
+	r.POST("/admin/products", productController.CreateProduct)
 	return r
 }
 
 func TestCreateProduct_Success(t *testing.T) {
 	r := setupTestRouter()
-	input := dto.ProductRequest{
+	input := dto.CreateProductRequest{
 		Name:        "Test Product",
 		Description: "Test Desc",
 		Price:       100,
@@ -46,7 +64,7 @@ func TestCreateProduct_Success(t *testing.T) {
 
 func TestCreateProduct_ValidationError(t *testing.T) {
 	r := setupTestRouter()
-	input := dto.ProductRequest{
+	input := dto.CreateProductRequest{
 		Name:        "",
 		Description: "",
 		Price:       -1,
