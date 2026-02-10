@@ -15,7 +15,7 @@ func ConnectDatabase() {
 		log.Fatal("Gagal koneksi ke database!", err)
 	}
 	// Migrasi model
-	database.AutoMigrate(&User{}, &Product{}, &Order{}, &OrderItem{})
+	database.AutoMigrate(&User{}, &Product{}, &Order{}, &OrderItem{}, &Log{})
 	DB = database
 }
 
@@ -24,6 +24,6 @@ func SetupTestDB() {
 	if err != nil {
 		panic("failed to connect test database")
 	}
-	db.AutoMigrate(&User{}, &Product{}, &Order{}, &OrderItem{})
+	db.AutoMigrate(&User{}, &Product{}, &Order{}, &OrderItem{}, &Log{})
 	DB = db
 }

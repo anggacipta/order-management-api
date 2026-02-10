@@ -33,3 +33,10 @@ type OrderItem struct {
 	Quantity  int     `json:"quantity"`
 	Price     int     `json:"price"`
 }
+
+type Log struct {
+	ID        uint   `gorm:"primaryKey" json:"id"`
+	Action    string `json:"action"`
+	UserID    uint   `json:"user_id"`
+	Timestamp int64  `json:"timestamp"`
+}

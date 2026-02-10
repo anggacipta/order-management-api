@@ -45,6 +45,23 @@ func (ctrl *ProductController) GetProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, products)
 }
 
+func (ctrl *ProductController) GetProductsPaginated(c *gin.Context) {
+	var req dto.PaginationRequest
+
+	if err := c.ShouldBindQuery(&req); err != nil {
+		helpers.RespondValidationError(c, err)
+		return
+	}
+
+	result, err := ctrl.productService.GetAllPaginated(req.Page, req.Limit)
+	if err != nil {
+		helpers.RespondInternalError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 func (ctrl *ProductController) GetProductByID(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {

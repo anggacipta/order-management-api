@@ -19,6 +19,34 @@ func (s *productService) GetAll() ([]models.Product, error) {
 	return s.productRepo.GetAll()
 }
 
+func (s *productService) GetAllPaginated(page, limit int) (*dto.PaginationResponse, error) {
+	// Set default values
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 {
+		limit = 10
+	}
+
+	products, totalRows, err := s.productRepo.GetAllPaginated(page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	totalPages := int(totalRows) / limit
+	if int(totalRows)%limit > 0 {
+		totalPages++
+	}
+
+	return &dto.PaginationResponse{
+		Data:       products,
+		Page:       page,
+		Limit:      limit,
+		TotalRows:  totalRows,
+		TotalPages: totalPages,
+	}, nil
+}
+
 func (s *productService) GetByID(id uint) (*models.Product, error) {
 	return s.productRepo.GetByID(id)
 }

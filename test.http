@@ -31,16 +31,19 @@ Content-Type: application/json
 ###
 ### Get User Profile
 GET http://localhost:8080/admin/dashboard
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTYyNzl9.Yuj-aZTildAgDPkGAP_aRsqLPBlbOdHjBbpFB3t7mZw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3Njg1NDk5Mjl9.kOPSYy7ljAH0OTH4J62Y-JYRVhQGbyqgcfjgVEWpK0s
 
 ### Get All Products
 GET http://localhost:8080/admin/products
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTYyNzl9.Yuj-aZTildAgDPkGAP_aRsqLPBlbOdHjBbpFB3t7mZw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3Njg1NDk5Mjl9.kOPSYy7ljAH0OTH4J62Y-JYRVhQGbyqgcfjgVEWpK0s
+
+### Get All Products Paginated
+GET http://localhost:8080/admin/products-paginated?page=1&limit=15
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NjY0NjIxMTN9.b6qeEL67jm-aYt72zS2bywx92FAekXLB29uQheoY72Q
 
 ### Create Product
 POST http://localhost:8080/admin/products
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTY4MjN9.osUD33sZbzIlxI-qkX9uUOYCL5vu34otlv7zcPoJn9I
-Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NjY0NjIxMTN9.b6qeEL67jm-aYt72zS2bywx92FAekXLB29uQheoY72Q
 
 {
     "name": "Product A",
@@ -51,11 +54,11 @@ Content-Type: application/json
 
 ### get Product by ID
 GET http://localhost:8080/admin/products/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTY4MjN9.osUD33sZbzIlxI-qkX9uUOYCL5vu34otlv7zcPoJn9I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3Njg1NTEzMDB9.71MmkrYLXU8bjkTe5iYwfi1Uee5egWDeHTIknsrqUck
 
 ### Update Product
 PUT http://localhost:8080/admin/products/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTYyNzl9.Yuj-aZTildAgDPkGAP_aRsqLPBlbOdHjBbpFB3t7mZw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTg3MTgxMDl9.xQcTGL5Lg7uLqIefIAFp70Aa1vOXtTqMZHoLtod4rZg
 Content-Type: application/json
 
 {
@@ -67,11 +70,11 @@ Content-Type: application/json
 
 ### Delete Product
 DELETE http://localhost:8080/admin/products/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTYyNzl9.Yuj-aZTildAgDPkGAP_aRsqLPBlbOdHjBbpFB3t7mZw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTg3MTgxMDl9.xQcTGL5Lg7uLqIefIAFp70Aa1vOXtTqMZHoLtod4rZg
 
 ### Create Order
 POST http://localhost:8080/orders
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTY4MjN9.osUD33sZbzIlxI-qkX9uUOYCL5vu34otlv7zcPoJn9I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTg3MTgxMDl9.xQcTGL5Lg7uLqIefIAFp70Aa1vOXtTqMZHoLtod4rZg
 Content-Type: application/json
 
 {
@@ -85,4 +88,20 @@ Content-Type: application/json
 
 ### Get My Orders
 GET http://localhost:8080/orders
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTUzNTY4MjN9.osUD33sZbzIlxI-qkX9uUOYCL5vu34otlv7zcPoJn9I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTg3MTgxMDl9.xQcTGL5Lg7uLqIefIAFp70Aa1vOXtTqMZHoLtod4rZg
+
+### Admin Get All Logs
+GET http://localhost:8080/admin/logs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTg4NTYwNDB9._5li6lThniGran59V4iDnK5J4Y61gR3n-vZw7EN0D9I
+Content-Type: application/json
+
+### Admin Create Log
+POST http://localhost:8080/admin/logs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3NTg4NTYwNDB9._5li6lThniGran59V4iDnK5J4Y61gR3n-vZw7EN0D9I
+Content-Type: application/json
+
+{
+    "action": "Created a new product",
+    "user_id": 2,
+    "timestamp": 1758718109
+}

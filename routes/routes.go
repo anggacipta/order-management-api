@@ -13,6 +13,7 @@ func SetupRoutes(r *gin.Engine, serviceContainer *services.ServiceContainer) {
 	authController := controllers.NewAuthController(serviceContainer.AuthService)
 	productController := controllers.NewProductController(serviceContainer.ProductService)
 	orderController := controllers.NewOrderController(serviceContainer.OrderService)
+	logController := controllers.NewLogController(serviceContainer.LogService)
 
 	// Auth routes
 	r.POST("/register", authController.Register)
@@ -46,6 +47,13 @@ func SetupRoutes(r *gin.Engine, serviceContainer *services.ServiceContainer) {
 			admin.GET("/products/:id", productController.GetProductByID)
 			admin.PUT("/products/:id", productController.UpdateProduct)
 			admin.DELETE("/products/:id", productController.DeleteProduct)
+
+			// Paginated Products
+			admin.GET("/products-paginated", productController.GetProductsPaginated)
+
+			// Order endpoint log
+			admin.GET("/logs", logController.GetAllLogs)
+			admin.POST("/logs", logController.CreateLog)
 		}
 	}
 }

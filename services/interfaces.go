@@ -15,6 +15,7 @@ type AuthService interface {
 // ProductService interface untuk business logic product
 type ProductService interface {
 	GetAll() ([]models.Product, error)
+	GetAllPaginated(page, limit int) (*dto.PaginationResponse, error)
 	GetByID(id uint) (*models.Product, error)
 	Create(req dto.CreateProductRequest) (*models.Product, error)
 	Update(id uint, req dto.UpdateProductRequest) (*models.Product, error)
@@ -26,4 +27,10 @@ type OrderService interface {
 	CreateOrder(userID uint, req dto.CreateOrderRequest) (*models.Order, error)
 	GetMyOrders(userID uint) ([]models.Order, error)
 	GetOrderByID(id uint) (*models.Order, error)
+}
+
+// LogService interface untuk business logic log
+type LogService interface {
+	GetAllLogs() ([]models.Log, error)
+	CreateLog(req dto.LogRequest) error
 }
